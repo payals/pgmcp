@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# PGMCP Server Startup Script - Example Configuration
+# Copy this file to start-server.sh and customize with your actual credentials
+# cp start-server.sh.example start-server.sh
+
+# Required: Database Connection
+# For PostgreSQL: postgres://username:password@hostname:port/database
+# For MySQL: mysql://username:password@tcp(hostname:port)/database
+export DATABASE_URL="postgres://username:password@localhost:5432/database_name"
+export OPENAI_API_KEY="your-openai-api-key-here"
+export OPENAI_MODEL="${OPENAI_MODEL:-gpt-4o-mini}"
+export OPENAI_BASE_URL="https://api.openai.com"  # Or your proxy URL
+export OPENAI_USER="your-username"
+
+# Optional: HTTP Server Configuration
+export HTTP_ADDR="${HTTP_ADDR:-:8080}"
+export HTTP_PATH="${HTTP_PATH:-/mcp}"
+
+# Optional: Security
+export AUTH_BEARER="${AUTH_BEARER:-}"
+
+# Optional: Performance Tuning
+export SCHEMA_TTL="${SCHEMA_TTL:-5m}"
+export QUERY_TIMEOUT="${QUERY_TIMEOUT:-25s}"
+export MAX_ROWS="${MAX_ROWS:-200}"
+
+# Optional: Logging
+export LOG_LEVEL="${LOG_LEVEL:-info}"
+
+echo "Starting PGMCP Server..."
+echo "Database: ${DATABASE_URL%@*}@..."  # Hide password in output
+echo "HTTP Addr: ${HTTP_ADDR}"
+echo "HTTP Path: ${HTTP_PATH}"
+
+./pgmcp-server

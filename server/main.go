@@ -1112,6 +1112,9 @@ Return ONLY SQL, nothing else.`
 	ctxTO, cancel := context.WithTimeout(ctx, 18*time.Second)
 	defer cancel()
 
+	// Get user identifier for OpenAI API (required by some proxies)
+	openaiUser := envDefault("OPENAI_USER", "test")
+
 	resp, err := s.llm.Chat.Completions.New(ctxTO, openai.ChatCompletionNewParams{
 		Model: openai.ChatModel(s.model),
 		Messages: []openai.ChatCompletionMessageParamUnion{
@@ -1120,6 +1123,7 @@ Return ONLY SQL, nothing else.`
 		},
 		MaxTokens:   openai.Int(maxModelTokens),
 		Temperature: openai.Float(0.2),
+		User:        openai.String(openaiUser), // Required by some OpenAI proxies
 	})
 	if err != nil {
 		return "", "", err
